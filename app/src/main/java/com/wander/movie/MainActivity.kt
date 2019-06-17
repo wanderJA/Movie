@@ -10,6 +10,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        content.background = ShadowDrawableWrapper(this,getDrawable(R.drawable.transprant_drawable),20f,40f,80f)
+        content.background = ShadowDrawableWrapper(this,getDrawable(R.drawable.transprant_drawable),80f,40f,80f)
     }
 }
