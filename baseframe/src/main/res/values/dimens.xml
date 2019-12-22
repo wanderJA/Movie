@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="input_padding">17dp</dimen>
+    <dimen name="button_padding">15dp</dimen>
+    <dimen name="text_height">20dp</dimen>
+    <dimen name="small_icon">20dp</dimen>
+    <dimen name="text_icon">15dp</dimen>
+    <dimen name="arrow_icon">15dp</dimen>
+
+    <dimen name="icon_padding">8dp</dimen>
+    <dimen name="content_padding">18dp</dimen>
+    <dimen name="small_item_margin">12dp</dimen>
+    <dimen name="item_margin">15dp</dimen>
+    <dimen name="large_item_margin">20dp</dimen>
+    <dimen name="text_padding">8dp</dimen>
+
+    <dimen name="largeTitleSize">18sp</dimen>
+    <dimen name="bigTitleSize">17sp</dimen>
+    <dimen name="titleSize">16sp</dimen>
+    <dimen name="headLine">15sp</dimen>
+    <dimen name="secondary">14sp</dimen>
+    <dimen name="smaller">13sp</dimen>
+    <dimen name="smallText">12sp</dimen>
+    <dimen name="markText">10sp</dimen>
+</resources>

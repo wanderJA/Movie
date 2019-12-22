@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="maxHeight" format="dimension" />
+    <declare-styleable name="AVLoadingIndicatorView">
+        <attr name="minWidth" format="dimension" />
+        <attr name="maxHeight" />
+        <attr name="maxWidth" format="dimension" />
+        <attr name="minHeight" format="dimension" />
+        <attr name="indicatorName" format="string" />
+        <attr name="indicatorColor" format="color" />
+    </declare-styleable>
+
+
+    <declare-styleable name="CircleLoadingView">
+        <attr format="boolean" name="auto_animation" />
+        <attr format="boolean" name="static_play" />
+        <attr format="dimension" name="size" />
+        <attr format="dimension" name="padding_vertical" />
+        <attr format="dimension" name="stroke_width" />
+        <attr format="color" name="color_round" />
+    </declare-styleable>
+
+
+    <!--可设置最大高度的RecyclerView-->
+    <declare-styleable name="FadingEdgeRecyclerView">
+        <attr name="maxHeight" />
+    </declare-styleable>
+</resources>
