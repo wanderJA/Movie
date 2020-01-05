@@ -5,9 +5,5 @@ package com.wander.baseframe.mvp
  * email 805677461@qq.com
  */
 interface IView {
-    fun showMessage(msg: String)
-    fun hideLoading()
-    fun showLoading()
     fun showError()
-    fun showNoNetWork()
 }

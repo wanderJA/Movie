@@ -9,35 +9,18 @@ import com.wander.baseframe.component.BaseLayerFragment
  * Created by wander on 2016/6/15.
  */
 abstract class BasePresenterFragment<T : IPresenter> : BaseLayerFragment() {
-    protected var mPresenter: T? = null
+    protected lateinit var mPresenter: T
 
-    protected abstract val buildPresenter: T?
+    protected abstract val buildPresenter: T
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mPresenter = buildPresenter
-        mPresenter?.onStart()
+        mPresenter.onStart()
     }
 
     override fun onDestroy() {
-        mPresenter?.onDetachView()
-        mPresenter = null
+        mPresenter.onDetachView()
         super.onDestroy()
     }
-
-    fun hideLoading() {
-
-    }
-
-    fun showLoading() {
-    }
-
-
-    open fun showError() {
-
-    }
-
-    fun showNoNetWork() {
-    }
-
 }
