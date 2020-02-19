@@ -4,6 +4,7 @@ package com.wander.baseframe.library.net.retrofit
 import com.wander.baseframe.utils.DebugLog
 import com.wander.baseframe.utils.NetworkUtil
 import okhttp3.Interceptor
+import okhttp3.Response
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketException
@@ -14,19 +15,20 @@ import java.net.UnknownHostException
 open class RetryInterceptor : Interceptor {
 
     @Throws(IOException::class)
-    override fun intercept(chain: Interceptor.Chain): okhttp3.Response? {
+    override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         // 当前在网络请求的子线程中
-        var response: okhttp3.Response? = null
+        var response: Response? = null
         var retryCount = 0
         var retry = false
-        val url = request.url().toString()
+        val url = request.url.toString()
         do {
             //            Log.w(TAG , "retryCount-->" + retryCount);
             try {
-                response = chain.proceed(request)
+                val response = chain.proceed(request)
                 // no Exception
                 retry = shouldRetry(retryCount++, response, null)
+                return response
 
             } catch (e: ConnectException) {
                 DebugLog.d(TAG, "ConnectException : $e")
@@ -68,14 +70,13 @@ open class RetryInterceptor : Interceptor {
 
             }
         } while (retry)
-
-        return response
+        return chain.proceed(request)
     }
 
     companion object {
 
         private val RETRY_COUNT = 3
-        private val RETRY_WAIT_TIME = 3000
+        private val RETRY_WAIT_TIME = 1000
 
         val ERROR_CODE_CONNECT_EXCEPTION = 1001
         val ERROR_CODE_SOCKET_EXCEPTION = 1002
@@ -86,7 +87,7 @@ open class RetryInterceptor : Interceptor {
         // 默认网络不可用的情况下不会重试，如果需要重试的话需，重载该函数。
         protected fun shouldRetry(
             retryTimes: Int,
-            response: okhttp3.Response?,
+            response: Response?,
             e: Exception?
         ): Boolean {
             if (retryTimes >= RETRY_COUNT) {
@@ -99,7 +100,7 @@ open class RetryInterceptor : Interceptor {
                 } else {
                     DebugLog.d(
                         TAG,
-                        "response.isSuccessful()? : " + response.isSuccessful + " code " + response.code()
+                        "response.isSuccessful()? : " + response.isSuccessful + " code " + response.code
                     )
                 }
             }
