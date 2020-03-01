@@ -14,7 +14,7 @@ import androidx.core.content.FileProvider
 import com.facebook.common.util.ByteConstants
 import com.wander.baseframe.BaseApp
 import com.wander.baseframe.BuildConfig
-import com.wander.baseframe.library.fresco.ReadBitmapMemoryCacheParams
+import com.wander.baseframe.library.fresco.MyBitmapMemoryCacheParams
 import com.wander.baseframe.utils.*
 import io.reactivex.plugins.RxJavaPlugins
 import java.io.File
@@ -31,8 +31,6 @@ object AppContext {
     var SCREEN_HEIGHT = 1920
     var STATUS_BAR_HEIGHT = 60
     var mBrand = ""
-    var systemStorageLow = false
-    var isOpenGLEnable = true
     var mChannel = "vipd"
 
 
@@ -66,27 +64,21 @@ object AppContext {
                 val width: Int
                 val height: Int
                 val wm1 = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-                if (wm1 != null) {
-                    val display = wm1.defaultDisplay
-                    val point = Point()
-                    display.getSize(point)
-                    width = point.x
-                    height = point.y
-                    val displayMetrics = DisplayMetrics()
-                    display.getMetrics(displayMetrics)
-                    DebugLog.i(
-                        TAG,
-                        String.format(
-                            "Screen density: %s\t fond scaledDensity:%s",
-                            displayMetrics.density,
-                            displayMetrics.scaledDensity
-                        )
+                val display = wm1.defaultDisplay
+                val point = Point()
+                display.getSize(point)
+                width = point.x
+                height = point.y
+                val displayMetrics = DisplayMetrics()
+                display.getMetrics(displayMetrics)
+                DebugLog.i(
+                    TAG,
+                    String.format(
+                        "Screen density: %s\t fond scaledDensity:%s",
+                        displayMetrics.density,
+                        displayMetrics.scaledDensity
                     )
-                } else {
-                    val displayMetrics = context.resources.displayMetrics
-                    width = displayMetrics.widthPixels
-                    height = displayMetrics.heightPixels
-                }
+                )
                 SCREEN_HEIGHT = PreferenceTool.get(SCREEN_HEIGHT_PRE, 0)
                 SCREEN_WIDTH = PreferenceTool.get(SCREEN_WIDTH_PRE, 0)
                 //用户调整分辨率，不包含虚拟按键的隐藏(为了保证小米全面屏获取高度不准确的问题，每次进入阅读器重新刷新)
@@ -134,7 +126,7 @@ object AppContext {
                     DebugLog.i("AppContext", "USER: " + Build.USER)
                     DebugLog.i(
                         TAG,
-                        "fresco memory:" + ReadBitmapMemoryCacheParams(context).getMaxCacheSize() / ByteConstants.MB + " MB"
+                        "fresco memory:" + MyBitmapMemoryCacheParams(context).getMaxCacheSize() / ByteConstants.MB + " MB"
                     )
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         val s = StringBuilder()

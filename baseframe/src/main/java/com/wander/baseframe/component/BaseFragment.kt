@@ -82,22 +82,6 @@ open class BaseFragment : Fragment() {
         mContext = context
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        try {
-            val childFragmentManager = Fragment::class.java
-                .getDeclaredField("mChildFragmentManager")
-            childFragmentManager.isAccessible = true
-            childFragmentManager.set(this, null)
-        } catch (e: NoSuchFieldException) {
-            throw RuntimeException(e)
-        } catch (e: IllegalAccessException) {
-            throw RuntimeException(e)
-        }
-
-    }
-
-
     /**
      * 如果是与ViewPager一起使用，调用的是setUserVisibleHint
      * 默认显示的fragment 比onCreate调用早

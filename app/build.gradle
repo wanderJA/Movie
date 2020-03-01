@@ -4,16 +4,34 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+// Manifest version information!
+def versionMajor = 0
+def versionMinor = 9
+def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+static def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+08:00"))
+}
+
 android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.wander.movie"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        multiDexEnabled true
+        versionCode versionMajor * 100 + versionMinor * 10 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionBuild}"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "movie"]
+
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
+        }
+        resConfigs 'zh'
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -24,6 +42,21 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+        ignoreWarnings true
+
+        disable 'RtlHardcoded', 'RtlCompat', 'RtlEnabled'
+    }
 }
 
 dependencies {
@@ -32,4 +65,5 @@ dependencies {
     debugImplementation 'com.readystatesoftware.chuck:library:1.1.0'
     releaseImplementation 'com.readystatesoftware.chuck:library-no-op:1.1.0'
     implementation project(path: ':baseframe')
+    implementation 'com.lzy.net:okgo:3.0.4'
 }

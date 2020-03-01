@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.wander.movie">
+        package="com.wander.movie">
 
     <application
             android:name=".App"
@@ -9,14 +9,46 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+            android:theme="@style/AppTheme"
+            android:usesCleartextTraffic="true">
+        <!--适配华为（huawei）刘海屏-->
+        <meta-data
+                android:name="android.notch_support"
+                android:value="true" />
+        <!--适配小米（xiaomi）刘海屏-->
+        <meta-data
+                android:name="notch.config"
+                android:value="portrait|landscape" />
+        <meta-data
+                android:name="UMENG_APPKEY"
+                android:value="5e4d5c1f570df329eb000399" />
+        <meta-data
+                android:name="UMENG_CHANNEL"
+                android:value="${UMENG_CHANNEL_VALUE}" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+        <activity
+                android:name=".ui.activity.FlashActivity"
+                android:configChanges="orientation|screenSize"
+                android:theme="@style/AppTheme.Boot">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="movie" />
+                <data android:host="mobile" />
+                <data android:path="/register/movie" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.activity.MainActivity" />
+        <activity android:name=".ui.activity.LearnWebActivity" />
     </application>
 
 </manifest>

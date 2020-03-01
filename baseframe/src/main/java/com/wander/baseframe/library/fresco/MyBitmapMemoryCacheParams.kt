@@ -12,7 +12,7 @@ import com.facebook.imagepipeline.cache.MemoryCacheParams
  * date 2018/8/22
  * @see com.facebook.imagepipeline.cache.DefaultBitmapMemoryCacheParamsSupplier
  */
-class ReadBitmapMemoryCacheParams(var mContext: Context) : Supplier<MemoryCacheParams> {
+class MyBitmapMemoryCacheParams(var mContext: Context) : Supplier<MemoryCacheParams> {
     private val MAX_CACHE_ENTRIES = 256
     private val MAX_EVICTION_QUEUE_SIZE = Integer.MAX_VALUE
     private val MAX_EVICTION_QUEUE_ENTRIES = Integer.MAX_VALUE

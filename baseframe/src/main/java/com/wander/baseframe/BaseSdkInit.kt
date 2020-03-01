@@ -2,14 +2,14 @@ package com.wander.baseframe
 
 import android.app.Application
 import android.graphics.Bitmap
-import com.facebook.common.logging.FLog
 import com.facebook.common.memory.MemoryTrimType
 import com.facebook.common.memory.NoOpMemoryTrimmableRegistry
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
+import com.wander.baseframe.context.AppContext
+import com.wander.baseframe.library.fresco.MyBitmapMemoryCacheParams
 import com.wander.baseframe.library.fresco.OkHttpImagePipelineConfigFactory
-import com.wander.baseframe.library.fresco.ReadBitmapMemoryCacheParams
 import com.wander.baseframe.utils.OkHttpUtils
 
 /**
@@ -19,6 +19,7 @@ import com.wander.baseframe.utils.OkHttpUtils
  */
 object BaseSdkInit {
     fun initOnAppCreate(context: Application) {
+        AppContext.init(context)
         AndroidUtilities.onCreate(context)
         UMConfigure.init(context, UMConfigure.DEVICE_TYPE_PHONE, null)
         // 选用AUTO页面采集模式
@@ -43,10 +44,10 @@ object BaseSdkInit {
         val config = OkHttpImagePipelineConfigFactory
             .newBuilder(context, OkHttpUtils.getClient())
             .setBitmapsConfig(Bitmap.Config.RGB_565)
-            .setBitmapMemoryCacheParamsSupplier(ReadBitmapMemoryCacheParams(context))
+            .setBitmapMemoryCacheParamsSupplier(MyBitmapMemoryCacheParams(context))
             .setMemoryTrimmableRegistry(memoryTrimmableRegistry)
             .build()
         Fresco.initialize(context, config)
-        FLog.setMinimumLoggingLevel(FLog.ASSERT)
+//        FLog.setMinimumLoggingLevel(FLog.ASSERT)
     }
 }

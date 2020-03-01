@@ -87,7 +87,7 @@ infix fun View.clickDelay(clickAction: () -> Unit) {
 /**
  * Gson转换实体
  */
-inline fun <reified T> Gson.fromJson(json: String) = this.fromJson(json, T::class.java)
+inline fun <reified T> Gson.fromJson(json: String): T = this.fromJson(json, T::class.java)
 
 fun Any.toJson() = Gson().toJson(this)
 

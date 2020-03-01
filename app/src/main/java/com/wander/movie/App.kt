@@ -6,6 +6,7 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.umeng.commonsdk.UMConfigure
 import com.wander.baseframe.BaseApp
 import com.wander.baseframe.context.AppContext
+import com.wander.movie.mod.net.OkGoUtils
 import timber.log.Timber
 
 
@@ -27,6 +28,7 @@ class App : BaseApp() {
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, null)
         UMConfigure.setLogEnabled(BuildConfig.DEBUG)
         initLog()
+        OkGoUtils.initOkGo()
         //设置全局的Header构建器
         SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout ->
             layout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.white)//全局设置主题颜色

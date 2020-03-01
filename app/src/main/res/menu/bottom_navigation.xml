@@ -8,14 +8,10 @@
     <item
         android:id="@+id/navigation_assets"
         android:icon="@drawable/main_view_selector"
-        android:title="资产" />
+            android:title="干货" />
 
     <item
         android:id="@+id/navigation_service"
         android:icon="@drawable/main_home_selector"
-        android:title="服务" />
-    <item
-        android:id="@+id/navigation_account"
-        android:icon="@drawable/main_me_selector"
-        android:title="账户" />
+            android:title="搜索" />
 </menu>
