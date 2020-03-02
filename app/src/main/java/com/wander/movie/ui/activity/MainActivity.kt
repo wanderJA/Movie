@@ -1,5 +1,7 @@
 package com.wander.movie.ui.activity
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.view.animation.LinearInterpolator
 import androidx.viewpager.widget.ViewPager
@@ -25,6 +27,9 @@ class MainActivity : BaseActivity(), CrashMain {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), 100)
+        }
     }
 
     private fun initView() {

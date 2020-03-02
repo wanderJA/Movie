@@ -2,6 +2,7 @@ package com.wander.baseframe
 
 import android.app.Application
 import android.graphics.Bitmap
+import com.facebook.common.logging.FLog
 import com.facebook.common.memory.MemoryTrimType
 import com.facebook.common.memory.NoOpMemoryTrimmableRegistry
 import com.facebook.drawee.backends.pipeline.Fresco
@@ -48,6 +49,6 @@ object BaseSdkInit {
             .setMemoryTrimmableRegistry(memoryTrimmableRegistry)
             .build()
         Fresco.initialize(context, config)
-//        FLog.setMinimumLoggingLevel(FLog.ASSERT)
+        FLog.setMinimumLoggingLevel(FLog.ASSERT)
     }
 }

@@ -25,7 +25,7 @@ class MovieRetrofit constructor(okHttpClient: OkHttpClient, baseUrl: String, isB
         var dataConverterFactory = DataConverterFactory.create(gson)
         private var mOkHttpClient: OkHttpClient? = null
         private val vipdHttpClient = getClient(true)
-        const val API_HOST = "http://www.bytespace.cn"
+        const val API_HOST = "http://www.bytespace.cn/web"
         val apiRetrofit = createVipd(API_HOST)
         const val UNLOGIN = 402
 
