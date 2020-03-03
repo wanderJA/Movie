@@ -7,4 +7,4 @@ data class GodMovieItem(
     var tort: Int
 )
 
-data class GodMovieList(var list: List<GodMovieList>, var pageCount: Int)
+data class GodMovieList(var list: List<GodMovieItem>, var pageCount: Int)

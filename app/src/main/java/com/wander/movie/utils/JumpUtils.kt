@@ -13,4 +13,8 @@ object JumpUtils {
         params.putString(CommonWebFragment.WEB_TITLE, title)
         ContainActivity.start(context, CommonWebFragment::class.java, params)
     }
+
+    fun jumpToGodMovieDetail(context: Context, id: String) {
+
+    }
 }

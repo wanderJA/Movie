@@ -2,10 +2,9 @@ package com.wander.movie.ui.fragment
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import com.wander.baseframe.component.BaseLayerFragment
 import com.wander.movie.R
+import com.wander.movie.adapter.MyPagerAdapter
 import kotlinx.android.synthetic.main.fragment_gan.*
 import java.util.*
 
@@ -30,25 +29,14 @@ class GanFragment: BaseLayerFragment() {
         val fragment3 = NewsTabFragment()
         fragment3.setTitle("前端")
         fragments.add(fragment3)
-        val adapter = MyPagerAdapter(childFragmentManager, fragments)
+        val adapter = MyPagerAdapter(
+            childFragmentManager,
+            fragments,
+            arrayListOf("Android", "iOS", "前端")
+        )
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = fragments.size
         tab.setupWithViewPager(viewPager)
     }
 
-    inner class MyPagerAdapter(fm: FragmentManager, private val fragments: List<NewsTabFragment>) :
-        FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-
-        override fun getPageTitle(position: Int): CharSequence? {
-            return fragments[position].getTitle()
-        }
-
-        override fun getItem(position: Int): androidx.fragment.app.Fragment {
-            return fragments[position]
-        }
-
-        override fun getCount(): Int {
-            return fragments.size
-        }
-    }
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:elevation="8dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/small_item_margin">
+
+        <TextView
+                android:id="@+id/cellMovieTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/content_padding"
+                android:layout_marginTop="@dimen/small_item_margin"
+                android:layout_marginRight="@dimen/content_padding"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/titleSize"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="习近平总书记在北京考察新冠肺炎防控科研攻关工作时的重要讲话引发强烈反响" />
+
+
+        <TextView
+                android:id="@+id/cellMovieTimeTip"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="发布时间："
+                android:textColor="@color/describe_text"
+                android:textSize="@dimen/smallText"
+                app:layout_constraintLeft_toLeftOf="@id/cellMovieTitle"
+                app:layout_constraintTop_toBottomOf="@id/cellMovieTitle" />
+
+        <TextView
+                android:id="@+id/cellMovieTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/content_padding"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/smallText"
+                app:layout_constraintLeft_toRightOf="@id/cellMovieTimeTip"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/cellMovieTimeTip"
+                tools:text="update:time" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

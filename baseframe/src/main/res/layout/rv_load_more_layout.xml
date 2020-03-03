@@ -11,9 +11,10 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-        <org.qiyi.basecore.widget.CircleLoadingView
+        <ProgressBar
                 android:id="@+id/loading_icon"
                 android:layout_width="20dp"
+                style="@style/AlertDialog.AppCompat"
                 android:layout_height="20dp" />
 
         <TextView

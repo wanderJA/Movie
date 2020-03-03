@@ -42,8 +42,8 @@ abstract class BasePresenter<T : IView>(mView: T) : IPresenter {
         callList = null
     }
 
-    protected fun addDisposable(subscription: Disposable) {
-        mCompositeDisposable.add(subscription)
+    protected fun addDisposable(subscription: Disposable?) {
+        subscription?.let { mCompositeDisposable.add(it) }
     }
 
     protected fun addCall(call: Call<*>?) {
