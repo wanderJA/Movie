@@ -1,6 +1,7 @@
 package com.wander.movie.mod.net
 
 import com.wander.baseframe.utils.ParamMap
+import com.wander.movie.bean.GodMovieDetail
 import com.wander.movie.bean.GodMovieList
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -12,4 +13,7 @@ interface IGodMovieApi {
 
     @GET("infos")
     fun getListInfo(@QueryMap params: ParamMap): Observable<GodResponseData<GodMovieList>>
+
+    @GET("detail")
+    fun getGodMovieDetail(@QueryMap params: ParamMap): Observable<GodResponseData<GodMovieDetail>>
 }

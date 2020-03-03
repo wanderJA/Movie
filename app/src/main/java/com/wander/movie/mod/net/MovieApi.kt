@@ -3,6 +3,7 @@ package com.wander.movie.mod.net
 import com.wander.baseframe.BaseApp
 import com.wander.baseframe.utils.DeviceTools
 import com.wander.baseframe.utils.ParamMap
+import com.wander.movie.bean.GodMovieDetail
 import com.wander.movie.bean.GodMovieList
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,6 +29,15 @@ object MovieApi {
         paramMap["type"] = type
         paramMap["deviceid"] = DeviceTools.getDeviceID(BaseApp.mApp)
         return GodMovieApi.getListInfo(paramMap).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun godMovieDetail(
+        id: String
+    ): Observable<GodResponseData<GodMovieDetail>>? {
+        val paramMap = ParamMap()
+        paramMap["detailid"] = id
+        return GodMovieApi.getGodMovieDetail(paramMap).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 

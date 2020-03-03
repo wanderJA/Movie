@@ -1,9 +1,11 @@
 package com.wander.movie.utils
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import com.wander.baseframe.component.CommonWebFragment
 import com.wander.baseframe.component.ContainActivity
+import com.wander.movie.ui.activity.GodMovieDetailActivity
 
 object JumpUtils {
 
@@ -14,7 +16,15 @@ object JumpUtils {
         ContainActivity.start(context, CommonWebFragment::class.java, params)
     }
 
-    fun jumpToGodMovieDetail(context: Context, id: String) {
+    fun jumpToGodMovieDetail(
+        context: Context,
+        id: String,
+        name: String
+    ) {
+        val intent = Intent(context, GodMovieDetailActivity::class.java)
+        intent.putExtra("id", id)
+        intent.putExtra("name", name)
+        context.startActivity(intent)
 
     }
 }

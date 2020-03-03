@@ -23,7 +23,7 @@ class CellGodMovie : RVBaseCell<GodMovieItem>() {
             holder.itemView.cellMovieTitle.text = data.name
             holder.itemView.cellMovieTime.text = data.time
             holder.itemView.setOnClickListener {
-                JumpUtils.jumpToGodMovieDetail(holder.itemView.context, data.id)
+                JumpUtils.jumpToGodMovieDetail(holder.itemView.context, data.id, data.name)
             }
 
         }

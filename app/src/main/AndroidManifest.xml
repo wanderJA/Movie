@@ -11,11 +11,11 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <!--适配华为（huawei）刘海屏-->
+        <activity android:name=".ui.activity.GodMovieDetailActivity"></activity>
+        <!-- 适配华为（huawei）刘海屏 -->
         <meta-data
                 android:name="android.notch_support"
-                android:value="true" />
-        <!--适配小米（xiaomi）刘海屏-->
+                android:value="true" /> <!-- 适配小米（xiaomi）刘海屏 -->
         <meta-data
                 android:name="notch.config"
                 android:value="portrait|landscape" />
@@ -46,7 +46,6 @@
                 <data android:path="/register/movie" />
             </intent-filter>
         </activity>
-
         <activity android:name=".ui.activity.MainActivity" />
         <activity android:name=".ui.activity.LearnWebActivity" />
     </application>
