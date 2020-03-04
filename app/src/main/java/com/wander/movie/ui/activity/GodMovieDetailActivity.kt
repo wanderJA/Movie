@@ -2,6 +2,7 @@ package com.wander.movie.ui.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import com.scwang.smartrefresh.layout.internal.ProgressDrawable
 import com.wander.baseframe.component.BaseLayerActivity
 import com.wander.baseframe.utils.ToastUtils
 import com.wander.baseframe.utils.Tools
@@ -39,6 +40,7 @@ class GodMovieDetailActivity : BaseLayerActivity() {
     private fun fillView(result: GodMovieDetail?) {
         result?.let {
             if (it.imgurls.isNotEmpty()) {
+                godDetailPoster.hierarchy.setProgressBarImage(ProgressDrawable())
                 godDetailPoster.setImageURI(it.imgurls[0])
             }
             godDetailContent.text = it.content

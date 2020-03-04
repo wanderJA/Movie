@@ -20,6 +20,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/content_padding"
+                android:adjustViewBounds="true"
+                app:actualImageScaleType="centerCrop"
+                app:placeholderImage="@drawable/default_image"
+                app:roundedCornerRadius="8dp"
+                app:viewAspectRatio="0.75"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

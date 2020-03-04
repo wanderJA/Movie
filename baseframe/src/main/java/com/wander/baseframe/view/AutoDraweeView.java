@@ -444,7 +444,7 @@ public class AutoDraweeView extends SimpleDraweeView {
         if (layoutParams != null && layoutParams.width > 0) {
             width = layoutParams.width;
         } else {
-            width = mMaxWidth > sDm.widthPixels ? sDm.widthPixels : mMaxWidth;
+            width = Math.min(mMaxWidth, sDm.widthPixels);
         }
 
         if (layoutParams != null && layoutParams.height > 0) {
