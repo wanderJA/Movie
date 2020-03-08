@@ -93,6 +93,14 @@ class PullRefreshRecyclerView @JvmOverloads constructor(
 
         }
 
+    fun firstPagerNeedLoad() {
+        val firstView = getChildAt(0)
+        val top = firstView?.top ?: 0
+        val topEdge = paddingTop
+        val isFullScreen = top < topEdge
+        onScrollBottomListener?.onLoadMore()
+    }
+
     init {
         addOnScrollListener(object : RecyclerView.OnScrollListener() {
 

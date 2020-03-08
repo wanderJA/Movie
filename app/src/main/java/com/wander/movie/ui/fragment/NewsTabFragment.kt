@@ -3,7 +3,6 @@ package com.wander.movie.ui.fragment
 import android.graphics.Color
 import android.nfc.tech.MifareUltralight.PAGE_SIZE
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
@@ -11,10 +10,12 @@ import com.lzy.okgo.OkGo
 import com.lzy.okgo.cache.CacheMode
 import com.lzy.okgo.model.Response
 import com.wander.baseframe.component.BaseLayerFragment
+import com.wander.baseframe.view.recycler.PullRefreshRecyclerView
+import com.wander.baseframe.view.recycler.adapter.RVSimpleAdapter
 import com.wander.movie.R
+import com.wander.movie.adapter.cell.CellNewsGank
 import com.wander.movie.ui.gank.GankModel
 import com.wander.movie.ui.gank.GankResponse
-import com.wander.movie.ui.gank.NewsAdapter
 import com.wander.movie.ui.gank.NewsCallback
 import kotlinx.android.synthetic.main.fragment_news_tab.*
 
@@ -27,10 +28,10 @@ class NewsTabFragment : BaseLayerFragment(), SwipeRefreshLayout.OnRefreshListene
 
     private var fragmentTitle = ""
     private var url = ""
-    private var newsAdapter: NewsAdapter = NewsAdapter()
+    private var mAdapter = RVSimpleAdapter()
     private var currentPage = 0
-    val URL_GANK_BASE = "http://gank.io/api/data/"
-    private var loading = false
+    private val URL_GANK_BASE = "http://gank.io/api/data/"
+    private var hasNext = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,27 +41,26 @@ class NewsTabFragment : BaseLayerFragment(), SwipeRefreshLayout.OnRefreshListene
     private val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
 
     protected fun initData() {
-        url = URL_GANK_BASE + fragmentTitle + "/" + PAGE_SIZE + "/"
+        url = "$URL_GANK_BASE$fragmentTitle/$PAGE_SIZE/"
         recyclerView.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = newsAdapter
+        recyclerView.adapter = mAdapter
 
         refreshLayout.setColorSchemeColors(Color.RED, Color.BLUE, Color.GREEN)
         refreshLayout.setOnRefreshListener(this)
 
-        recyclerView.addOnScrollListener(object :
-            androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
-
-            override fun onScrolled(
-                recyclerView: androidx.recyclerview.widget.RecyclerView,
-                dx: Int,
-                dy: Int
-            ) {
-                super.onScrolled(recyclerView, dx, dy)
-                var lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-                if (lastVisibleItemPosition >= layoutManager.itemCount - 3 && !loading) {
-                    loading = true
-                    onLoadMoreRequested()
+        recyclerView.setOnScrollBottomListener(object :
+            PullRefreshRecyclerView.OnScrollBottomListener {
+            override fun onLoadMore() {
+                if (mAdapter.canLoadMore()) {
+                    if (hasNext) {
+                        mAdapter.showLoadMore()
+                        onLoadMoreRequested()
+                    } else {
+                        if (mAdapter.itemCount > 3) {
+                            mAdapter.showBottom()
+                        }
+                    }
                 }
             }
         })
@@ -72,15 +72,15 @@ class NewsTabFragment : BaseLayerFragment(), SwipeRefreshLayout.OnRefreshListene
 
     /** 下拉刷新  */
     override fun onRefresh() {
-        OkGo.get<GankResponse<List<GankModel>>>(url + "1")//
-            .cacheKey("TabFragment_" + fragmentTitle)       //由于该fragment会被复用,必须保证key唯一,否则数据会发生覆盖
+        OkGo.get<GankResponse<List<GankModel>>>(url + "1")
+            .cacheKey("TabFragment_$fragmentTitle")       //由于该fragment会被复用,必须保证key唯一,否则数据会发生覆盖
             .cacheMode(CacheMode.FIRST_CACHE_THEN_REQUEST)  //缓存模式先使用缓存,然后使用网络数据
             .execute(object : NewsCallback<GankResponse<List<GankModel>>>() {
                 override fun onSuccess(response: Response<GankResponse<List<GankModel>>>?) {
                     val results = response?.body()?.results
                     if (results != null) {
                         currentPage = 2
-                        newsAdapter.addData(results)
+                        refreshList(results)
                     }
                     setRefreshing(false)
                 }
@@ -95,14 +95,14 @@ class NewsTabFragment : BaseLayerFragment(), SwipeRefreshLayout.OnRefreshListene
 
     /** 上拉加载  */
     fun onLoadMoreRequested() {
-        OkGo.get<GankResponse<List<GankModel>>>(url + currentPage)//
+        OkGo.get<GankResponse<List<GankModel>>>(url + currentPage)
             .cacheMode(CacheMode.NO_CACHE)       //上拉不需要缓存
             .execute(object : NewsCallback<GankResponse<List<GankModel>>>() {
                 override fun onSuccess(response: Response<GankResponse<List<GankModel>>>?) {
                     val results = response?.body()?.results
                     if (results != null && results.isNotEmpty()) {
                         currentPage++
-                        newsAdapter.addData(results)
+                        refreshList(results, false)
                     } else {
                         //显示没有更多数据
                     }
@@ -110,8 +110,6 @@ class NewsTabFragment : BaseLayerFragment(), SwipeRefreshLayout.OnRefreshListene
 
                 override fun onFinish() {
                     super.onFinish()
-                    Handler().postDelayed({ loading = false }, 500)
-
                 }
 
                 override fun onError(response: Response<GankResponse<List<GankModel>>>?) {
@@ -122,17 +120,26 @@ class NewsTabFragment : BaseLayerFragment(), SwipeRefreshLayout.OnRefreshListene
             })
     }
 
+    private fun refreshList(results: List<GankModel>, refresh: Boolean = true) {
+        if (refresh) {
+            mAdapter.clear()
+            setRefreshing(true)
+            recyclerView.firstPagerNeedLoad()
+        }
+        mAdapter.hideLoadMore()
+        results.forEach {
+            val cellNewsGank = CellNewsGank()
+            cellNewsGank.data = it
+            mAdapter.add(cellNewsGank)
+        }
+    }
+
     fun showToast(msg: String?) {
         Snackbar.make(recyclerView, msg ?: "null", Snackbar.LENGTH_SHORT).show()
     }
 
     fun setRefreshing(refreshing: Boolean) {
         refreshLayout.post(Runnable { refreshLayout.isRefreshing = refreshing })
-    }
-
-
-    fun getTitle(): String {
-        return fragmentTitle
     }
 
     fun setTitle(title: String) {

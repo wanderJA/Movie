@@ -5,6 +5,8 @@ import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.View
 import android.widget.EditText
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.wander.baseframe.ext.ViewClickDelay.SPACE_TIME
 import com.wander.baseframe.ext.ViewClickDelay.hash
@@ -108,3 +110,19 @@ fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
     })
 }
 
+
+/**
+ * 仅对item全部展示出来有效
+ */
+fun RecyclerView.needShowBottom(show: (needShow: Boolean) -> Unit) {
+    post {
+        if (layoutManager is LinearLayoutManager) {
+            (layoutManager as LinearLayoutManager).let {
+                val lastVisibleItemPosition = it.findLastVisibleItemPosition()
+                val childAt = it.getChildAt(lastVisibleItemPosition)
+                val needShow = childAt?.bottom ?: 0 >= bottom
+                show(needShow)
+            }
+        }
+    }
+}
