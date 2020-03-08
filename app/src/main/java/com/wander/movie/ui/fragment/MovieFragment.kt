@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import com.wander.baseframe.component.BaseFragment
 import com.wander.baseframe.component.BaseLayerFragment
+import com.wander.baseframe.utils.ImmersionBar
 import com.wander.movie.R
 import com.wander.movie.adapter.MyPagerAdapter
 import com.wander.movie.mod.net.MovieApi
@@ -28,6 +29,7 @@ class MovieFragment : BaseLayerFragment() {
     }
 
     private fun initView() {
+        stateBarSpace.layoutParams?.height = ImmersionBar.getStatusBarHeight(resources)
         val fragments = ArrayList<BaseFragment>()
         val titles = ArrayList<String>()
         val fragment1 = GodMovieListFragment("gndy")

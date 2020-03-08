@@ -3,6 +3,7 @@ package com.wander.movie.ui.fragment
 import android.os.Bundle
 import android.view.View
 import com.wander.baseframe.component.BaseLayerFragment
+import com.wander.baseframe.utils.ImmersionBar
 import com.wander.movie.R
 import com.wander.movie.adapter.MyPagerAdapter
 import kotlinx.android.synthetic.main.fragment_gan.*
@@ -19,6 +20,7 @@ class GanFragment: BaseLayerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        stateBarSpace.layoutParams?.height = ImmersionBar.getStatusBarHeight(resources)
         val fragments = ArrayList<NewsTabFragment>()
         val fragment1 = NewsTabFragment()
         fragment1.setTitle("Android")

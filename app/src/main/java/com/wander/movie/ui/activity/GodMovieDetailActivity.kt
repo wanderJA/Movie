@@ -1,9 +1,11 @@
 package com.wander.movie.ui.activity
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
-import com.scwang.smartrefresh.layout.internal.ProgressDrawable
+import com.facebook.drawee.drawable.ProgressBarDrawable
 import com.wander.baseframe.component.BaseLayerActivity
+import com.wander.baseframe.utils.AppUtils
 import com.wander.baseframe.utils.ToastUtils
 import com.wander.baseframe.utils.Tools
 import com.wander.movie.R
@@ -40,15 +42,19 @@ class GodMovieDetailActivity : BaseLayerActivity() {
     private fun fillView(result: GodMovieDetail?) {
         result?.let {
             if (it.imgurls.isNotEmpty()) {
-                godDetailPoster.hierarchy.setProgressBarImage(ProgressDrawable())
+                godDetailPoster.hierarchy.setProgressBarImage(ProgressBarDrawable())
                 godDetailPoster.setImageURI(it.imgurls[0])
             }
             godDetailContent.text = it.content
             if (it.downloadurls?.isNotEmpty() == true) {
                 godDetailDownload.text = it.downloadurls?.get(0)
             }
+            val downloadUrl = godDetailDownload.text.toString()
             copy.setOnClickListener {
-                Tools.setClipBoardContent(godDetailDownload.text.toString())
+                Tools.setClipBoardContent(downloadUrl)
+            }
+            jumpThund.setOnClickListener {
+                AppUtils.goApp(mActivity, Uri.parse(downloadUrl))
             }
         }
     }

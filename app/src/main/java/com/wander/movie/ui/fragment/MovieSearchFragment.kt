@@ -15,7 +15,7 @@ class MovieSearchFragment: BasePresenterFragment<MovieSearchPresenter>(),IMovieS
         get() = MovieSearchPresenter(this)
 
     override fun getLayoutId() = R.layout.movie_search
-
+    override fun isUseTitleView() = false
 
     override fun showError() {
     }
