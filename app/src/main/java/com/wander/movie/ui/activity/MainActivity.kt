@@ -33,14 +33,15 @@ class MainActivity : BaseActivity(), CrashMain {
     }
 
     private fun initView() {
-        ImmersionBar.initBar(this, true)
         fragmentList.add(MovieFragment())
         fragmentList.add(GanFragment())
-        fragmentList.add(MovieSearchFragment())
+        val searchFragment = MovieSearchFragment().apply { fromMainFragment = true }
+        fragmentList.add(searchFragment)
 
         val mAdapter = MainAdapter(supportFragmentManager, fragmentList)
 
         mViewPage.adapter = mAdapter
+        mViewPage.offscreenPageLimit = 3
         val viewPagerScroller = ViewPagerScroller(mActivity, LinearInterpolator())
         viewPagerScroller.initViewPagerScroll(mViewPage)
         mViewPage.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
@@ -67,14 +68,17 @@ class MainActivity : BaseActivity(), CrashMain {
             when (item.itemId) {
                 R.id.navigation_main -> {
                     mViewPage.currentItem = 0
+                    ImmersionBar.initBar(mActivity)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_assets -> {
                     mViewPage.currentItem = 1
+                    ImmersionBar.initBar(mActivity)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_service -> {
                     mViewPage.currentItem = 2
+                    ImmersionBar.initBar(mActivity, true)
                     return@OnNavigationItemSelectedListener true
                 }
             }

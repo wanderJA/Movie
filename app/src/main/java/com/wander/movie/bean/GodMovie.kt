@@ -18,3 +18,5 @@ data class GodMovieDetail(
     var imgurls: List<String> = ArrayList()
 
 )
+
+data class GodSearchKeyList(var kws: List<String>?)

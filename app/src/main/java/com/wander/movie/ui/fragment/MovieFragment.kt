@@ -9,6 +9,7 @@ import com.wander.baseframe.utils.ImmersionBar
 import com.wander.movie.R
 import com.wander.movie.adapter.MyPagerAdapter
 import com.wander.movie.mod.net.MovieApi
+import com.wander.movie.utils.JumpUtils
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_gan.*
 
@@ -26,6 +27,13 @@ class MovieFragment : BaseLayerFragment() {
         initView()
 
         loadData()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            ImmersionBar.initBar(mActivity)
+        }
     }
 
     private fun initView() {
@@ -57,6 +65,8 @@ class MovieFragment : BaseLayerFragment() {
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = fragments.size
         tab.setupWithViewPager(viewPager)
+
+        menuIcon.setOnClickListener { mActivity?.let { it1 -> JumpUtils.jumpToMovieSearch(it1) } }
 
     }
 

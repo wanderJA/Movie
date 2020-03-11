@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.wander.baseframe.component.CommonWebFragment
 import com.wander.baseframe.component.ContainActivity
 import com.wander.movie.ui.activity.GodMovieDetailActivity
+import com.wander.movie.ui.fragment.MovieSearchFragment
 
 object JumpUtils {
 
@@ -26,5 +27,9 @@ object JumpUtils {
         intent.putExtra("name", name)
         context.startActivity(intent)
 
+    }
+
+    fun jumpToMovieSearch(mActivity: Context) {
+        ContainActivity.start(mActivity, MovieSearchFragment::class.java)
     }
 }

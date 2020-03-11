@@ -18,6 +18,12 @@ class GanFragment: BaseLayerFragment() {
     override fun getLayoutId() = R.layout.fragment_gan
     override fun isUseTitleView() = false
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            ImmersionBar.initBar(mActivity)
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         stateBarSpace.layoutParams?.height = ImmersionBar.getStatusBarHeight(resources)
