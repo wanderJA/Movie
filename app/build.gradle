@@ -8,9 +8,14 @@ apply plugin: 'kotlin-android-extensions'
 def versionMajor = 0
 def versionMinor = 9
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
-static def releaseTime() {
+static def currentTime() {
     return new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+08:00"))
 }
+
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 
 android {
     compileSdkVersion 29
@@ -32,12 +37,53 @@ android {
         resConfigs 'zh'
     }
 
+    signingConfigs {
+        debug_sign {
+            storeFile file("wander.jks")
+            keyAlias keystoreProperties['keyAlias']
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('gradle.properties').newDataInputStream())
+            storePassword = properties.getProperty("KEYSTORE_PASSWORD")
+            keyPassword = properties.getProperty("KEY_PASSWORD")
+        }
+
+        release_sign {
+            storeFile file("wander.jks")
+            keyAlias keystoreProperties['keyAlias']
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('gradle.properties').newDataInputStream())
+            storePassword = properties.getProperty("KEYSTORE_PASSWORD")
+            keyPassword = properties.getProperty("KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release_sign
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
+
+    //修改生成的apk名字
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            if (variant.buildType.name == "debug") {
+                outputFileName = "watch_movie-${variant.buildType.name}-${variant.versionName}-debug.apk"
+            } else {
+                def buildTime = currentTime()
+                //outputFileName = "Reader-Android-${variant.buildType.name}-${variant.versionName}-release.apk"
+                outputFileName = "watch_movie-${variant.buildType.name}-${variant.versionName}-${buildTime}.apk"
+            }
+        }
+    }
+
+
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8

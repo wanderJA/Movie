@@ -11,7 +11,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activity.GodMovieDetailActivity"></activity>
+        <activity android:name=".ui.activity.GodMovieDetailActivity" />
         <!-- 适配华为（huawei）刘海屏 -->
         <meta-data
                 android:name="android.notch_support"
