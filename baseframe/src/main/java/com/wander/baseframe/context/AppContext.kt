@@ -165,7 +165,7 @@ object AppContext {
     fun getFileProviderUri(file: File): Uri {
         return FileProvider.getUriForFile(
             BaseApp.getInstance(),
-            BuildConfig.APPLICATION_ID + ".fileprovider",
+            BuildConfig.LIBRARY_PACKAGE_NAME + ".fileprovider",
             file.absoluteFile
         )
     }
