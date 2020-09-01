@@ -6,6 +6,7 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.umeng.commonsdk.UMConfigure
 import com.wander.baseframe.BaseApp
 import com.wander.baseframe.context.AppContext
+import com.wander.movie.mod.ad.TTAdManagerHolder
 import com.wander.movie.mod.net.OkGoUtils
 import timber.log.Timber
 
@@ -39,6 +40,8 @@ class App : BaseApp() {
             //指定为经典Footer，默认是 BallPulseFooter
             ClassicsFooter(context).setDrawableSize(20f)
         }
+
+        TTAdManagerHolder.init(this)
 
     }
 

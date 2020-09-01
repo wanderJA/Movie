@@ -27,7 +27,7 @@
                 android:value="${UMENG_CHANNEL_VALUE}" />
 
         <activity
-                android:name=".ui.activity.FlashActivity"
+                android:name=".ui.activity.SplashActivity"
                 android:configChanges="orientation|screenSize"
                 android:theme="@style/AppTheme.Boot">
             <intent-filter>
@@ -48,6 +48,46 @@
         </activity>
         <activity android:name=".ui.activity.MainActivity" />
         <activity android:name=".ui.activity.LearnWebActivity" />
+
+
+        <meta-data
+                android:name="com.google.android.gms.ads.APPLICATION_ID"
+                android:value="ca-app-pub-2547387438729744~9596900917" />
+
+        <provider
+                android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
+                android:authorities="${applicationId}.TTFileProvider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/file_paths" />
+        </provider>
+
+        <provider
+                android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
+                android:authorities="${applicationId}.TTMultiProvider"
+                android:exported="false" />
+
+
+        <!--        <service android:name=".service.AppDownloadService" />-->
+
+
+        <!--        <service android:name="com.locker.service.TraceService" />-->
+
+        <!--        <service-->
+        <!--                android:name="com.locker.service.LockerService"-->
+        <!--                android:enabled="true"-->
+        <!--                android:exported="true" />-->
+
+        <!--        <receiver android:name="com.locker.receiver.BootCompleteReceiver">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
+        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--            </intent-filter>-->
+        <!--        </receiver>-->
+
+
     </application>
 
 </manifest>

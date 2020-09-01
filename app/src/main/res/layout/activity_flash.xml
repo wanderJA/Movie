@@ -3,6 +3,11 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="ui.activity.FlashActivity">
+        tools:context="ui.activity.SplashActivity">
+
+    <FrameLayout
+            android:id="@+id/mSplashContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

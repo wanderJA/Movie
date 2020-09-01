@@ -20,10 +20,13 @@
             android:layout_marginRight="@dimen/content_padding"
             android:background="@drawable/rect_corner15"
             android:drawableLeft="@drawable/ic_search"
+            android:drawableTint="@color/black_alpha_20"
             android:drawablePadding="5dp"
             android:paddingLeft="10dp"
+            android:singleLine="true"
             android:textColor="@color/secondary_text"
             android:textSize="@dimen/titleSize"
+            android:imeOptions="actionSearch"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/searchCancel"
             app:layout_constraintTop_toBottomOf="@id/stateBarSpace" />
