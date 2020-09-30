@@ -11,6 +11,7 @@ import com.wander.baseframe.context.AppContext
 import com.wander.baseframe.context.CrashMain
 import com.wander.baseframe.context.NeverCrash
 import com.wander.baseframe.utils.DebugLog
+import com.wander.baseframe.utils.ThreadUtils
 import com.wander.baseframe.utils.ToastUtils
 import org.jetbrains.anko.runOnUiThread
 import timber.log.Timber
@@ -38,7 +39,14 @@ open class BaseApp : MultiDexApplication() {
         super.onCreate()
 //        install()
         mApp = this
-        BaseSdkInit.initOnAppCreate(this)
+        if (ThreadUtils.isMainProcess(this)) {
+            BaseSdkInit.initOnAppCreate(this)
+            createOnMainProcess()
+        }
+    }
+
+    open fun createOnMainProcess() {
+
     }
 
 

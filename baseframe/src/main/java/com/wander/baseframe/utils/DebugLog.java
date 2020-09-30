@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.wander.baseframe.BuildConfig;
+import com.wander.baseframe.context.AppContext;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -160,6 +161,20 @@ public class DebugLog {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String splice(Object... msg) {
+        if (!AppContext.INSTANCE.isLog()) {
+            return "";
+        }
+        if (msg == null) {
+            return "-------------------------  log is null ---------------------------";
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Object m : msg) {
+            stringBuilder.append(m).append("\t");
+        }
+        return stringBuilder.toString();
     }
 
 

@@ -1,7 +1,11 @@
 package com.wander.baseframe.utils;
 
+import android.app.ActivityManager;
+import android.app.Application;
+import android.content.Context;
 import android.os.Process;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -57,6 +61,25 @@ public class ThreadUtils {
 
     public static DispatchQueue getPingbackQueue() {
         return pingbackQueue;
+    }
+
+    public static boolean isMainProcess(Application application) {
+        try {
+            ActivityManager am = ((ActivityManager) application.getSystemService(Context.ACTIVITY_SERVICE));
+            List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+            String mainProcessName = application.getPackageName();
+            int myPid = android.os.Process.myPid();
+            for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+                if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+                    return true;
+                }
+            }
+            return false;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 }
 

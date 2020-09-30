@@ -26,6 +26,10 @@ class App : BaseApp() {
         startTime = System.currentTimeMillis()
         AppContext.versionName = BuildConfig.VERSION_NAME
 
+    }
+
+    override fun createOnMainProcess() {
+        super.createOnMainProcess()
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, null)
         UMConfigure.setLogEnabled(BuildConfig.DEBUG)
         initLog()
@@ -42,7 +46,6 @@ class App : BaseApp() {
         }
 
         TTAdManagerHolder.init(this)
-
     }
 
     private fun initLog() {

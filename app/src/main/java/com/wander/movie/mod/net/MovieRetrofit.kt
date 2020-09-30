@@ -46,7 +46,10 @@ class MovieRetrofit constructor(okHttpClient: OkHttpClient, baseUrl: String, isB
                 }
 
                 okBuilder.addInterceptor(RetryInterceptor())
-                    .addInterceptor(getLoggingInterceptor())
+                if (AppContext.isLog) {
+                    okBuilder.addInterceptor(getLoggingInterceptor())
+                }
+
                 mOkHttpClient = okBuilder.build()
                 mOkHttpClient?.dispatcher?.maxRequestsPerHost = 16
 
@@ -57,6 +60,7 @@ class MovieRetrofit constructor(okHttpClient: OkHttpClient, baseUrl: String, isB
         private fun getLoggingInterceptor() = LoggingInterceptor.Builder()
             .loggable(BuildConfig.DEBUG)
             .request()
+            .loggable(false)
             .requestTag("VipD-Request")
             .response()
             .responseTag("VipD-Response")
