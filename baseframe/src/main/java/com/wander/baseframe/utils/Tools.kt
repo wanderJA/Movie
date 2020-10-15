@@ -60,7 +60,7 @@ object Tools {
                     "label",
                     content
                 ) //文本型数据 clipData 的构造方法。
-                clipboardManager.primaryClip = clipData // 将 字符串 str 保存 到剪贴板。
+                clipboardManager.setPrimaryClip(clipData) // 将 字符串 str 保存 到剪贴板。
                 ToastUtils.showToast("复制成功")
             } catch (e: Exception) {
                 e.printStackTrace()
