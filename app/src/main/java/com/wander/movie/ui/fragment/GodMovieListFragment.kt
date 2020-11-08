@@ -1,7 +1,6 @@
 package com.wander.movie.ui.fragment
 
-import android.os.Bundle
-import android.view.View
+import com.wander.baseframe.constants.TYPE
 import com.wander.baseframe.mvp.BasePresenterFragment
 import com.wander.baseframe.view.recycler.PullRefreshRecyclerView
 import com.wander.baseframe.view.recycler.adapter.RVSimpleAdapter
@@ -12,7 +11,7 @@ import com.wander.movie.presenter.GodMovieListPresenter
 import com.wander.movie.ui.iview.IGodMovieList
 import kotlinx.android.synthetic.main.fragment_god_movie_list.*
 
-class GodMovieListFragment(var type: String) : BasePresenterFragment<GodMovieListPresenter>(),
+class GodMovieListFragment : BasePresenterFragment<GodMovieListPresenter>(),
     IGodMovieList {
     private var mAdapter = RVSimpleAdapter()
     override fun isUseTitleView() = false
@@ -21,14 +20,17 @@ class GodMovieListFragment(var type: String) : BasePresenterFragment<GodMovieLis
 
     override fun getLayoutId() = R.layout.fragment_god_movie_list
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        mPresenter.type = type
+    override fun initEventAndData() {
+        mPresenter.type = arguments?.getString(TYPE, "gndy") ?: "gndy"
+    }
+
+    override fun initLazyData() {
         initView()
         mPresenter.loadData()
     }
 
     private fun initView() {
+        showTransparentLoading()
         mRecyclerView.adapter = mAdapter
         mRefreshLayout.setOnRefreshListener {
             mPresenter.loadData()

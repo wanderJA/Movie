@@ -2,8 +2,6 @@ package com.wander.movie.ui.fragment
 
 import android.graphics.Color
 import android.nfc.tech.MifareUltralight.PAGE_SIZE
-import android.os.Bundle
-import android.view.View
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.lzy.okgo.OkGo
@@ -33,14 +31,10 @@ class NewsTabFragment : BaseLayerFragment(), SwipeRefreshLayout.OnRefreshListene
     private val URL_GANK_BASE = "http://gank.io/api/data/"
     private var hasNext = true
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initData()
-    }
 
     private val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
 
-    protected fun initData() {
+    override fun initLazyData() {
         url = "$URL_GANK_BASE$fragmentTitle/$PAGE_SIZE/"
         recyclerView.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
         recyclerView.layoutManager = layoutManager

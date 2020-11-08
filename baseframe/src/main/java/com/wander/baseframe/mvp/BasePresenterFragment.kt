@@ -1,6 +1,7 @@
 package com.wander.baseframe.mvp
 
 
+import android.content.Context
 import android.os.Bundle
 import com.wander.baseframe.component.BaseLayerFragment
 
@@ -12,11 +13,16 @@ abstract class BasePresenterFragment<T : IPresenter> : BaseLayerFragment() {
     protected lateinit var mPresenter: T
 
     protected abstract val buildPresenter: T
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mPresenter = buildPresenter
+
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mPresenter = buildPresenter
-        mPresenter.onStart()
+        mPresenter.onCreate()
     }
 
     override fun onDestroy() {

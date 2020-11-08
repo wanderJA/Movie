@@ -6,5 +6,5 @@ package com.wander.baseframe.mvp
 interface IPresenter {
 
     fun onDetachView()
-    fun onStart()
+    fun onCreate()
 }

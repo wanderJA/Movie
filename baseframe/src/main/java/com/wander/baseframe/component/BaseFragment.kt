@@ -20,14 +20,17 @@ open class BaseFragment : Fragment() {
 
     lateinit var mContext: Context
     protected var tagFragment = javaClass.simpleName
-    private var isFragmentVisible: Boolean = false                  //是否可见状态
-    private var isPrepared: Boolean = false                 //标志位，View已经初始化完成。
-    private var isFirstLoad = true         //是否第一次加载
+    protected var isVisibleInPage = false               //是否可见状态
+    private var isPrepared = false                 //标志位，View已经初始化完成。
+    private var isFirstLoad = true      //是否第一次加载
+    protected var isActive = false
     protected var statisticsName: String? = null
 
     open fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         return false
     }
+
+    open fun handleBackPressed() = false
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +38,11 @@ open class BaseFragment : Fragment() {
     }
 
     @Nullable
-    override fun onCreateView(@NonNull inflater: LayoutInflater, @Nullable container: ViewGroup?, @Nullable savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        @NonNull inflater: LayoutInflater,
+        @Nullable container: ViewGroup?,
+        @Nullable savedInstanceState: Bundle?
+    ): View? {
         isFirstLoad = true
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -43,16 +50,45 @@ open class BaseFragment : Fragment() {
     override fun onViewCreated(@NonNull view: View, @Nullable savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isPrepared = true
+        initViewOnCreated()
         lazyLoad()
     }
 
+    /**
+     * 非behavior方式实现PageAdapter，懒加载会子类onViewCreated之前，需注意
+     */
+    protected open fun initViewOnCreated() {}
 
     open fun initEventAndData() {
+    }
+
+
+    protected fun needResumeLoad(): Boolean {
+        return true
     }
 
     override fun onResume() {
         super.onResume()
         MobclickAgent.onPageStart(statisticsName ?: tagFragment) //统计页面("MainScreen"为页面名称，可自定义)
+        isActive = true
+        //isVisibleInPage 用于viewPage,  isHidden()用户show or hide 操作
+        if (parentFragment != null) {
+            val parentVisibleInPage = if (parentFragment is BaseFragment) {
+                (parentFragment as BaseFragment).isVisibleInPage
+            } else {
+                parentFragment?.userVisibleHint ?: false
+            }
+            val parentVisible = parentFragment?.isHidden == false && parentVisibleInPage
+            //有父fragment时，必须父页面可见时再判断可见性
+            if (!isVisibleInPage && !isHidden && parentVisible && needResumeLoad()) {
+                dealVisibleOrHidden(true)
+            }
+        } else {
+            //没有父fragment，且当前fragment可见时
+            if (!isVisibleInPage && !isHidden && needResumeLoad()) {
+                dealVisibleOrHidden(true)
+            }
+        }
     }
 
     override fun onPause() {
@@ -102,14 +138,14 @@ open class BaseFragment : Fragment() {
 
     private fun dealVisibleOrHidden(isVisibleToUser: Boolean) {
         if (isVisibleToUser) {
-            isFragmentVisible = true
+            isVisibleInPage = true
             DebugLog.d(tag, " [onVisibleInViewPager]\ttrue\tprepared: $isPrepared")
             if (!isPrepared) {
                 return
             }
             onVisible()
         } else {
-            isFragmentVisible = false
+            isVisibleInPage = false
             DebugLog.d(tag, " [onVisibleInViewPager]\tfalse\tprepared: $isPrepared")
             if (!isPrepared) {
                 return
@@ -136,7 +172,7 @@ open class BaseFragment : Fragment() {
     }
 
     open fun lazyLoad() {
-        if (!isFragmentVisible || !isFirstLoad || !isPrepared) {
+        if (!isVisibleInPage || !isFirstLoad || !isPrepared) {
             return
         }
         isFirstLoad = false
@@ -146,6 +182,19 @@ open class BaseFragment : Fragment() {
     open fun initLazyData() {
 
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        isPrepared = false
+        isFirstLoad = true
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        isPrepared = false
+        isFirstLoad = true
+    }
+
 
     protected var mActivity: FragmentActivity? = null
         get() {

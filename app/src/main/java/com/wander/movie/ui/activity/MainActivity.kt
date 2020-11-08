@@ -11,9 +11,11 @@ import com.wander.baseframe.component.BaseActivity
 import com.wander.baseframe.component.BaseFragment
 import com.wander.baseframe.context.CrashMain
 import com.wander.baseframe.utils.ImmersionBar
+import com.wander.baseframe.utils.TimeUtils
+import com.wander.baseframe.utils.ToastUtils
+import com.wander.baseframe.view.tab.SimplePagerAdapter
 import com.wander.baseframe.view.utils.ViewPagerScroller
 import com.wander.movie.R
-import com.wander.movie.adapter.MainAdapter
 import com.wander.movie.ui.fragment.GanFragment
 import com.wander.movie.ui.fragment.MovieFragment
 import com.wander.movie.ui.fragment.MovieSearchFragment
@@ -30,6 +32,7 @@ class MainActivity : BaseActivity(), CrashMain {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), 100)
         }
+
     }
 
     private fun initView() {
@@ -38,8 +41,7 @@ class MainActivity : BaseActivity(), CrashMain {
         val searchFragment = MovieSearchFragment().apply { fromMainFragment = true }
         fragmentList.add(searchFragment)
 
-        val mAdapter = MainAdapter(supportFragmentManager, fragmentList)
-
+        val mAdapter = SimplePagerAdapter(supportFragmentManager)
         mViewPage.adapter = mAdapter
         mViewPage.offscreenPageLimit = 3
         val viewPagerScroller = ViewPagerScroller(mActivity, LinearInterpolator())
@@ -85,5 +87,23 @@ class MainActivity : BaseActivity(), CrashMain {
 
             false
         })
+        mAdapter.fragments = fragmentList
+        mAdapter.notifyDataSetChanged()
+        mViewPage.currentItem = 0
+    }
+
+    private var lastBackPressed = 0L
+
+    override fun onBackPressed() {
+        if (fragmentList[mViewPage.currentItem].handleBackPressed()) {
+            return
+        }
+        if (System.currentTimeMillis() - lastBackPressed > TimeUtils.SECOND * 5) {
+            ToastUtils.showToast("再按一次退出")
+        } else {
+            finish()
+        }
+        lastBackPressed = System.currentTimeMillis()
+
     }
 }

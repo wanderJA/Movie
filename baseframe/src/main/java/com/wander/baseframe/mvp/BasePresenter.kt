@@ -5,6 +5,9 @@ import androidx.lifecycle.LifecycleOwner
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import retrofit2.Call
 
 
@@ -12,7 +15,7 @@ import retrofit2.Call
  * Created by wander on 2016/6/15.
  * email 805677461@qq.com
  */
-abstract class BasePresenter<T : IView>(mView: T) : IPresenter {
+abstract class BasePresenter<T : IView>(mView: T) : IPresenter, CoroutineScope by MainScope() {
     protected var mView: T? = null
     protected var tag = javaClass.simpleName
     protected var mCompositeDisposable = CompositeDisposable()
@@ -56,15 +59,16 @@ abstract class BasePresenter<T : IView>(mView: T) : IPresenter {
     }
 
     override fun onDetachView() {
-        mView = null
         unSubscribe()
+        cancel()
+        mView = null
     }
 
 
     //提供给autoDispose处理rxJava内存泄漏
     lateinit var lifecycleScope: AndroidLifecycleScopeProvider
 
-    override fun onStart() {
+    override fun onCreate() {
         //提供给autoDispose处理rxJava内存泄漏
         if (mView is LifecycleOwner) lifecycleScope =
             AndroidLifecycleScopeProvider.from(mView as LifecycleOwner, Lifecycle.Event.ON_DESTROY)
