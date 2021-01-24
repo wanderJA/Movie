@@ -64,6 +64,7 @@ class GodMovieListFragment : BasePresenterFragment<GodMovieListPresenter>(),
             cellGodMovie.data = it
             mAdapter.add(cellGodMovie)
         }
+        dismissTransparentLoading()
 
     }
 
