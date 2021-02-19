@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import com.facebook.drawee.drawable.ProgressBarDrawable
 import com.wander.baseframe.component.BaseLayerActivity
+import com.wander.baseframe.ext.gone
 import com.wander.baseframe.utils.AppUtils
 import com.wander.baseframe.utils.ToastUtils
 import com.wander.baseframe.utils.Tools
@@ -48,14 +49,18 @@ class GodMovieDetailActivity : BaseLayerActivity() {
             godDetailContent.text = it.content
             if (it.downloadurls?.isNotEmpty() == true) {
                 godDetailDownload.text = it.downloadurls?.get(0)
+                val downloadUrl = godDetailDownload.text.toString()
+                copy.setOnClickListener {
+                    Tools.setClipBoardContent(downloadUrl)
+                }
+                jumpThund.setOnClickListener {
+                    AppUtils.goApp(mActivity, Uri.parse(downloadUrl))
+                }
+            } else {
+                copy.gone()
+                jumpThund.gone()
             }
-            val downloadUrl = godDetailDownload.text.toString()
-            copy.setOnClickListener {
-                Tools.setClipBoardContent(downloadUrl)
-            }
-            jumpThund.setOnClickListener {
-                AppUtils.goApp(mActivity, Uri.parse(downloadUrl))
-            }
+
         }
     }
 

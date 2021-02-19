@@ -12,13 +12,11 @@ import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import com.wander.baseframe.R
-import com.wander.baseframe.utils.ImmersionBar
-import com.wander.baseframe.utils.NetworkUtil
-import com.wander.baseframe.utils.ResourceUtils
-import com.wander.baseframe.utils.Tools
+import com.wander.baseframe.utils.*
 import com.wander.baseframe.view.SimpleTitleView
 import com.wander.baseframe.view.loading.CircleLoadingView
 import kotlinx.android.synthetic.main.base_view_contain.view.*
+import java.util.logging.Logger
 
 /**
  * author wander
@@ -207,7 +205,9 @@ abstract class BaseLayerFragment : BaseFragment() {
             ViewGroup.LayoutParams.MATCH_PARENT,
             Gravity.CENTER
         )
-        circleLoadingView.setOnClickListener { }
+        circleLoadingView.setOnClickListener {
+            DebugLog.e(tagFragment, "click loading")
+        }
         mAboveContainer.addView(circleLoadingView)
     }
 

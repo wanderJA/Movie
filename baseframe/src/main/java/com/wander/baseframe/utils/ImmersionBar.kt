@@ -29,11 +29,7 @@ object ImmersionBar {
     var statusBarColor = Color.TRANSPARENT //状态栏颜色
 
     fun getStatusBarHeight(resources: Resources): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getInternalDimensionSize(resources, STATUS_BAR_HEIGHT_RES_NAME)
-        } else {
-            0
-        }
+        return getInternalDimensionSize(resources, STATUS_BAR_HEIGHT_RES_NAME)
     }
 
     private fun getInternalDimensionSize(res: Resources, key: String): Int {
@@ -68,15 +64,17 @@ object ImmersionBar {
      */
     @JvmOverloads
     fun initBar(mWindow: Window, isDarkFont: Boolean = true) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                try {
-                    initBarAboveLOLLIPOP(mWindow, isDarkFont)
-                } catch (e: Exception) {
-                }
-            }
+        var uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE  //防止系统栏隐藏时内容区域大小发生变化
+        uiFlags = uiFlags or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN  //Activity全屏显示，但状态栏不会被隐藏覆盖，状态栏依然可见，Activity顶端布局部分会被状态栏遮住。
+        mWindow.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            setBarColor(mWindow, statusBarColor, 0.0f)
+        } else {
+            setBarColor(mWindow, statusBarColor, 0.3f)
         }
+        uiFlags = setStatusBarDarkFont(uiFlags, isDarkFont)
+        uiFlags = uiFlags or View.SYSTEM_UI_FLAG_VISIBLE
+        mWindow.decorView.systemUiVisibility = uiFlags
     }
 
     /**
@@ -92,39 +90,16 @@ object ImmersionBar {
      */
     fun hideBar(mActivity: Activity) {
         val mWindow = mActivity.window ?: return
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            mWindow.decorView.systemUiVisibility =
+        mWindow.decorView.systemUiVisibility =
                 mWindow.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LOW_PROFILE
-        }
     }
 
-    /**
-     * 初始化android 5.0以上状态栏和导航栏
-     */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    fun initBarAboveLOLLIPOP(mWindow: Window, isDarkFont: Boolean) {
-        var uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE  //防止系统栏隐藏时内容区域大小发生变化
-        uiFlags =
-            uiFlags or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN  //Activity全屏显示，但状态栏不会被隐藏覆盖，状态栏依然可见，Activity顶端布局部分会被状态栏遮住。
-        mWindow.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            setBarColor(mWindow, statusBarColor, 0.0f)
-        } else {
-            setBarColor(mWindow, statusBarColor, 0.3f)
-        }
-        uiFlags = setStatusBarDarkFont(uiFlags, isDarkFont)
-        uiFlags = uiFlags or View.SYSTEM_UI_FLAG_VISIBLE
-        mWindow.decorView.systemUiVisibility = uiFlags
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     fun setBarColor(mWindow: Window, @ColorInt statusBarColor: Int, statusBarAlpha: Float) {
         mWindow.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)  //需要设置这个才能设置状态栏颜色
         mWindow.statusBarColor =
             ColorUtils.blendARGB(statusBarColor, Color.BLACK, statusBarAlpha)  //设置状态栏颜色
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     fun setBarColor(
         mWindow: Window, @ColorInt statusBarColor: Int, @ColorInt statusBarEndColor: Int,
         statusBarAlpha: Float
@@ -153,7 +128,6 @@ object ImmersionBar {
      *
      * @param statusBarAlpha 0 - 1 1为全黑
      */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     fun setNavBarColor(mWindow: Window, @ColorInt navigationBarColor: Int, statusBarAlpha: Float) {
         val mContext = mWindow.context
         if (getNavigationBarHeight(mContext) > 0) {
@@ -193,9 +167,7 @@ object ImmersionBar {
         val d = windowManager.defaultDisplay
 
         val realDisplayMetrics = DisplayMetrics()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            d.getRealMetrics(realDisplayMetrics)
-        }
+        d.getRealMetrics(realDisplayMetrics)
 
         val realHeight = realDisplayMetrics.heightPixels
         val realWidth = realDisplayMetrics.widthPixels
