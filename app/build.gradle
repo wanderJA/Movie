@@ -104,6 +104,9 @@ android {
 
         disable 'RtlHardcoded', 'RtlCompat', 'RtlEnabled'
     }
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {

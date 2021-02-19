@@ -16,18 +16,20 @@ import com.wander.baseframe.utils.ToastUtils
 import com.wander.baseframe.view.tab.SimplePagerAdapter
 import com.wander.baseframe.view.utils.ViewPagerScroller
 import com.wander.movie.R
+import com.wander.movie.databinding.ActivityMainBinding
 import com.wander.movie.ui.fragment.GanFragment
 import com.wander.movie.ui.fragment.MovieFragment
 import com.wander.movie.ui.fragment.MovieSearchFragment
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class MainActivity : BaseActivity(), CrashMain {
 
+    private lateinit var binding: ActivityMainBinding
     private val fragmentList = ArrayList<BaseFragment>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initView()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), 100)
@@ -42,16 +44,16 @@ class MainActivity : BaseActivity(), CrashMain {
         fragmentList.add(searchFragment)
 
         val mAdapter = SimplePagerAdapter(supportFragmentManager)
-        mViewPage.adapter = mAdapter
-        mViewPage.offscreenPageLimit = 3
+        binding.mViewPage.adapter = mAdapter
+        binding.mViewPage.offscreenPageLimit = 3
         val viewPagerScroller = ViewPagerScroller(mActivity, LinearInterpolator())
-        viewPagerScroller.initViewPagerScroll(mViewPage)
-        mViewPage.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+        viewPagerScroller.initViewPagerScroll(binding.mViewPage)
+        binding.mViewPage.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 when (position) {
-                    0 -> mNavigationView.selectedItemId = R.id.navigation_main
-                    1 -> mNavigationView.selectedItemId = R.id.navigation_assets
-                    2 -> mNavigationView.selectedItemId = R.id.navigation_service
+                    0 -> binding.mNavigationView.selectedItemId = R.id.navigation_main
+                    1 -> binding.mNavigationView.selectedItemId = R.id.navigation_assets
+                    2 -> binding.mNavigationView.selectedItemId = R.id.navigation_service
                 }
                 viewPagerScroller.resetScrollDuration()
             }
@@ -64,22 +66,22 @@ class MainActivity : BaseActivity(), CrashMain {
                 //                WLog.e(TAG, "position:" + position + "\tpositionOffset:" + positionOffset + "\tpositionOffsetPixels:" + positionOffsetPixels);
             }
         })
-        mNavigationView.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_AUTO
-        mNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        binding.mNavigationView.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_AUTO
+        binding.mNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
             viewPagerScroller.setScrollDuration(0)
             when (item.itemId) {
                 R.id.navigation_main -> {
-                    mViewPage.currentItem = 0
+                    binding.mViewPage.currentItem = 0
                     ImmersionBar.initBar(mActivity)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_assets -> {
-                    mViewPage.currentItem = 1
+                    binding.mViewPage.currentItem = 1
                     ImmersionBar.initBar(mActivity)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_service -> {
-                    mViewPage.currentItem = 2
+                    binding.mViewPage.currentItem = 2
                     ImmersionBar.initBar(mActivity, true)
                     return@OnNavigationItemSelectedListener true
                 }
@@ -89,13 +91,13 @@ class MainActivity : BaseActivity(), CrashMain {
         })
         mAdapter.fragments = fragmentList
         mAdapter.notifyDataSetChanged()
-        mViewPage.currentItem = 0
+        binding.mViewPage.currentItem = 0
     }
 
     private var lastBackPressed = 0L
 
     override fun onBackPressed() {
-        if (fragmentList[mViewPage.currentItem].handleBackPressed()) {
+        if (fragmentList[binding.mViewPage.currentItem].handleBackPressed()) {
             return
         }
         if (System.currentTimeMillis() - lastBackPressed > TimeUtils.SECOND * 5) {
