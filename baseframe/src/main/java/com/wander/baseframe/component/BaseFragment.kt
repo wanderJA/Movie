@@ -93,6 +93,8 @@ open class BaseFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
+        dealVisibleOrHidden(false);
+        isActive = false;
         MobclickAgent.onPageEnd(statisticsName ?: tagFragment)
     }
 
